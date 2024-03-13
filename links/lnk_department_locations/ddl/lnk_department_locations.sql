@@ -45,4 +45,15 @@ $dwh_presentation$
     end;
 $dwh_presentation$;
 
-
+do
+$generation$
+    begin
+        INSERT INTO presentation.lnk_department_locations
+        SELECT random() * 899999999999 + 100000000000,
+               md5(random()::text)::char(32),
+               md5(random()::text)::char(32),
+               NOW() + (random() * (NOW() + '-900 days' - NOW())) + '-30 days',
+               md5(random()::text)::varchar(12)
+        FROM generate_series(1, 100);
+    end;
+$generation$;

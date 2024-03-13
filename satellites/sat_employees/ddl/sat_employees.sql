@@ -34,7 +34,7 @@ $dwh_presentation$
     begin
         create table presentation.sat_employees
         (
-            lnk_employees_seq numeric(12)
+            lnk_employees_seq int
             constraint fk_sat_employees_lnk_employees_seq
                     references presentation.lnk_employee_current_info
                     on delete set null,
@@ -53,4 +53,24 @@ $dwh_presentation$
     end;
 $dwh_presentation$;
 
-
+do
+$generation$
+    begin
+        INSERT INTO presentation.sat_employees
+        SELECT (random() * 99 + 3)::int,
+               NOW() + (random() * (NOW() + '90 days' - NOW())) + '30 days',
+               NOW() + (random() * (NOW() + '90 days' - NOW())) + '30 days',
+               md5(random()::text)::varchar(20),
+               md5(random()::text)::varchar(25),
+               md5(random()::text)::varchar(25),
+               md5(random()::text)::varchar(20),
+               NOW() + (random() * (NOW() + '90 days' - NOW())) + '30 days',
+               (random() * 100000 + 11),
+               (random()),
+--                md5(random()::text)::char(32),
+               md5(random()::text)::varchar(12)
+--                NOW() + (random() * (NOW() + '90 days' - NOW())) + '30 days',
+--                md5(random()::text)::varchar(12)
+        FROM generate_series(1, 5);
+    end;
+$generation$;
