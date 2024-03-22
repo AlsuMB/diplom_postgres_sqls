@@ -27,9 +27,9 @@ $dwh_presentation$
     begin
         CREATE TABLE presentation.lnk_department_locations
         (
-            lnk_department_locations_seq numeric(12) primary key,
-            hub_department_seq           char(32),
-            hub_location_seq             char(32),
+            lnk_department_locations_seq serial primary key,
+            hub_department_seq           int,
+            hub_location_seq             int,
             lnk_load_dts                 date,
             hub_rec_src                  varchar(12),
 
@@ -48,12 +48,12 @@ $dwh_presentation$;
 do
 $generation$
     begin
-        INSERT INTO presentation.lnk_department_locations
-        SELECT random() * 899999999999 + 100000000000,
-               md5(random()::text)::char(32),
-               md5(random()::text)::char(32),
-               NOW() + (random() * (NOW() + '-900 days' - NOW())) + '-30 days',
+        INSERT INTO presentation.lnk_department_locations(hub_department_seq, hub_location_seq, lnk_load_dts, hub_rec_src)
+        SELECT (random() * 99 + 1)::int,
+               (random() * 99 + 3)::int,
+               NOW() + (random() * (NOW() + '-90 days' - NOW())) + '-30 days',
                md5(random()::text)::varchar(12)
-        FROM generate_series(1, 100);
+        FROM generate_series(1, 20);
     end;
 $generation$;
+
